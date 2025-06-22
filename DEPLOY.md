@@ -107,6 +107,7 @@ docker-compose down
 - Usuário não-root (`nestjs`)
 - Imagem Alpine Linux (menor tamanho)
 - Configuração simplificada
+- CORS configurado por ambiente
 
 ### Performance
 
@@ -114,7 +115,33 @@ docker-compose down
 - Build otimizado com SWC
 - Imagem final minimalista
 
-## �� Monitoramento
+## 🔒 Configuração de CORS
+
+### Desenvolvimento
+
+Permite conexões de:
+
+- `http://localhost:3000`
+- `http://localhost:3001`
+- `http://localhost:5173` (Vite dev server)
+- `http://localhost:4173` (Vite preview)
+- `http://127.0.0.1:*` (equivalente)
+
+### Produção
+
+Permite conexões apenas de:
+
+- `https://gustavocardilho.com.br`
+- `https://www.gustavocardilho.com.br`
+
+### Configuração
+
+- **Methods**: GET, POST, PUT, DELETE, PATCH, OPTIONS
+- **Headers**: Content-Type, Authorization, X-Requested-With
+- **Credentials**: true
+- **Options Success Status**: 200
+
+## 🔍 Monitoramento
 
 ### Logs
 
@@ -141,6 +168,13 @@ docker logs container_id
 3. **Logs**: Verifique os logs da aplicação no Railway
 4. **Teste local**: Execute `./scripts/test-run.sh` para verificar
 
+### CORS Issues
+
+1. **Desenvolvimento**: Verifique se está usando `NODE_ENV=development`
+2. **Produção**: Confirme se o domínio está na lista permitida
+3. **Headers**: Verifique se os headers estão sendo enviados corretamente
+4. **Credentials**: Certifique-se de que `credentials: true` está configurado no frontend
+
 ### Service Unavailable
 
 1. **Health check desabilitado**: Removido para evitar problemas de inicialização
@@ -160,6 +194,13 @@ docker logs container_id
 - ✅ Corrigido import de `generated/prisma` para `@prisma/client`
 - ✅ Prisma client gerado durante o build
 - ✅ Dependências do Prisma incluídas na imagem final
+
+### CORS Configuration
+
+- ✅ Configuração baseada em ambiente
+- ✅ Domínios permitidos configurados
+- ✅ Arquivo de configuração separado
+- ✅ Logs de debug para CORS
 
 ### Inicialização Simplificada
 

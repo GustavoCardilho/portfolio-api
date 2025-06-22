@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { getCorsConfig } from './lib/config/cors.config';
 
 async function bootstrap() {
   try {
@@ -17,11 +18,11 @@ async function bootstrap() {
     console.log('🌐 Servidor rodando na porta:', port);
     console.log('🏥 Health check:', `http://localhost:${port}/health`);
 
-    app.enableCors({
-      origin: '*',
-      methods: ['GET', 'POST', 'PUT', 'DELETE'],
-      allowedHeaders: ['Content-Type', 'Authorization'],
-    });
+    // Configuração do CORS
+    const corsConfig = getCorsConfig();
+    console.log('🔒 CORS configurado para:', corsConfig.origin);
+
+    app.enableCors(corsConfig);
 
     await app.listen(port);
 
