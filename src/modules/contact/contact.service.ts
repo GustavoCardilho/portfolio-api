@@ -1,9 +1,13 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { EmailService } from 'src/lib/email/email';
 
 @Injectable()
 export class ContactService {
-  constructor(private readonly emailService: EmailService) {}
+  constructor(
+    private readonly emailService: EmailService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async sendContactEmail(email: string, name: string, message: string) {
     try {
@@ -14,7 +18,7 @@ export class ContactService {
         `;
 
       await this.emailService.sendEmail(
-        'gustavorafael1106@gmail.com',
+        this.configService.get('email.contact') ?? 'gustavo.rcardilho@gmail.com',
         'Portfolio: Tentativa de contato do(a) ' + name,
         text,
       );

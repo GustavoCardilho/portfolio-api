@@ -12,5 +12,6 @@ export const configurations = () => ({
   email: {
     apiKey: process.env.EMAIL_API_KEY,
     from: process.env.EMAIL_FROM,
+    contact: process.env.EMAIL_CONTACT,
   },
 });
