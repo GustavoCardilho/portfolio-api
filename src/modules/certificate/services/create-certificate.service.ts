@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Prisma } from 'generated/prisma';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/lib/database/prisma.service';
 import { S3Service } from 'src/lib/s3/s3.service';
 import { CreateCertificateDto } from '../dto/create-certificate.dto';

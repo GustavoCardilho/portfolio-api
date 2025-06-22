@@ -33,14 +33,27 @@ NODE_ENV=production
 PORT=3000
 ```
 
-### 2. Deploy Automático
+### 2. Teste Local Antes do Deploy
+
+```bash
+# Testar build localmente
+./scripts/test-build.sh
+
+# Build da imagem Docker
+docker build -t portfolio-api .
+
+# Teste local com Docker
+docker run -p 3000:3000 portfolio-api
+```
+
+### 3. Deploy Automático
 
 1. Conecte seu repositório ao Railway
 2. O Railway detectará automaticamente o `Dockerfile`
 3. Configure as variáveis de ambiente
 4. Deploy será iniciado automaticamente
 
-### 3. Deploy Manual
+### 4. Deploy Manual
 
 ```bash
 # Build local para teste
@@ -121,9 +134,9 @@ docker logs container_id
 
 ### Build Falha
 
-1. Verifique se todas as dependências estão no `package.json`
-2. Confirme se o `pnpm-lock.yaml` está atualizado
-3. Verifique se o Prisma client está sendo gerado
+1. **Erro de Prisma**: Verifique se o `DATABASE_URL` está configurado
+2. **Dependências**: Confirme se o `pnpm-lock.yaml` está atualizado
+3. **TypeScript**: Execute `./scripts/test-build.sh` localmente
 
 ### Runtime Errors
 
@@ -136,6 +149,20 @@ docker logs container_id
 1. Monitore o uso de memória
 2. Verifique se o health check está passando
 3. Analise os logs de erro
+
+## 🔧 Correções Recentes
+
+### Prisma Client
+
+- ✅ Corrigido import de `generated/prisma` para `@prisma/client`
+- ✅ Prisma client gerado durante o build
+- ✅ Dependências do Prisma incluídas na imagem final
+
+### Build Process
+
+- ✅ Multi-stage build otimizado
+- ✅ Cache de dependências
+- ✅ Health checks configurados
 
 ## 📈 Métricas
 
@@ -156,6 +183,7 @@ Para deploy automático:
 
 Em caso de problemas:
 
-1. Verifique os logs no Railway
-2. Teste localmente com Docker
-3. Verifique as variáveis de ambiente
+1. Execute `./scripts/test-build.sh` localmente
+2. Verifique os logs no Railway
+3. Teste localmente com Docker
+4. Verifique as variáveis de ambiente
