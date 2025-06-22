@@ -103,7 +103,7 @@ docker-compose down
 
 - Usuário não-root (`nestjs`)
 - Imagem Alpine Linux (menor tamanho)
-- Health checks configurados
+- Health checks gerenciados pelo Railway
 
 ### Performance
 
@@ -115,10 +115,10 @@ docker-compose down
 
 ### Health Check
 
-- Endpoint: `/health`
-- Intervalo: 30s
-- Timeout: 3s
-- Retries: 3
+- **Endpoint**: `/health`
+- **Configuração**: Gerenciada pelo Railway via `railway.toml`
+- **Timeout**: 300s
+- **Retry Policy**: ON_FAILURE com 3 tentativas
 
 ### Logs
 
@@ -144,6 +144,12 @@ docker logs container_id
 2. Confirme se o banco de dados está acessível
 3. Verifique os logs da aplicação
 
+### Health Check Issues
+
+1. **Railway gerencia o health check**: Não há health check no Dockerfile
+2. **Endpoint configurado**: `/health` retorna `{ status: 'ok' }`
+3. **Timeout configurado**: 300s no `railway.toml`
+
 ### Performance
 
 1. Monitore o uso de memória
@@ -158,11 +164,17 @@ docker logs container_id
 - ✅ Prisma client gerado durante o build
 - ✅ Dependências do Prisma incluídas na imagem final
 
+### Health Check
+
+- ✅ Removido health check do Dockerfile
+- ✅ Railway gerencia health check via `railway.toml`
+- ✅ Endpoint `/health` configurado corretamente
+
 ### Build Process
 
 - ✅ Multi-stage build otimizado
 - ✅ Cache de dependências
-- ✅ Health checks configurados
+- ✅ Configuração Railway otimizada
 
 ## 📈 Métricas
 
