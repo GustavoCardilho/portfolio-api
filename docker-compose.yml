@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  portfolio-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Adicione suas variáveis de ambiente aqui
+      # - DATABASE_URL=your_database_url
+      # - EMAIL_API_KEY=your_email_api_key
+      # - AWS_ACCESS_KEY_ID=your_aws_key
+      # - AWS_SECRET_ACCESS_KEY=your_aws_secret
+      # - AWS_REGION=your_aws_region
+      # - AWS_S3_BUCKET=your_s3_bucket
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "require('http').get('http://localhost:3000/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    # Para desenvolvimento local, você pode descomentar a linha abaixo
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules
