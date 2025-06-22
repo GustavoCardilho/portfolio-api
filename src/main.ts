@@ -2,18 +2,38 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  try {
+    console.log('🚀 Iniciando aplicação NestJS...');
+    console.log('📊 Variáveis de ambiente:');
+    console.log('   NODE_ENV:', process.env.NODE_ENV);
+    console.log('   PORT:', process.env.PORT);
+    console.log('   DATABASE_URL:', process.env.DATABASE_URL ? 'Configurado' : 'Não configurado');
 
-  console.log('Server running on port', process.env.PORT ?? 3000);
-  console.log('Environment:', process.env.NODE_ENV);
-  console.log('Health:', `http://localhost:${process.env.PORT ?? 3000}/health`);
+    const app = await NestFactory.create(AppModule);
 
-  app.enableCors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  });
+    const port = process.env.PORT ?? 3000;
 
-  await app.listen(process.env.PORT ?? 3000);
+    console.log('✅ Aplicação criada com sucesso');
+    console.log('🌐 Servidor rodando na porta:', port);
+    console.log('🏥 Health check:', `http://localhost:${port}/health`);
+
+    app.enableCors({
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+    });
+
+    await app.listen(port);
+
+    console.log('🎉 Aplicação iniciada com sucesso!');
+    console.log('📡 Aguardando conexões...');
+  } catch (error) {
+    console.error('❌ Erro ao iniciar aplicação:', error);
+    process.exit(1);
+  }
 }
-bootstrap();
+
+bootstrap().catch((error) => {
+  console.error('❌ Erro fatal na aplicação:', error);
+  process.exit(1);
+});
