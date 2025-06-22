@@ -106,7 +106,7 @@ docker-compose down
 
 - Usuário não-root (`nestjs`)
 - Imagem Alpine Linux (menor tamanho)
-- Health checks gerenciados pelo Railway
+- Configuração simplificada
 
 ### Performance
 
@@ -114,14 +114,7 @@ docker-compose down
 - Build otimizado com SWC
 - Imagem final minimalista
 
-## 🔍 Monitoramento
-
-### Health Check
-
-- **Endpoint**: `/health`
-- **Configuração**: Gerenciada pelo Railway via `railway.toml`
-- **Timeout**: 600s
-- **Retry Policy**: ON_FAILURE com 5 tentativas
+## �� Monitoramento
 
 ### Logs
 
@@ -150,22 +143,14 @@ docker logs container_id
 
 ### Service Unavailable
 
-1. **Timeout aumentado**: Health check timeout para 600s
-2. **Script de inicialização**: Logs detalhados durante o startup
-3. **Tratamento de erros**: Melhor tratamento de erros no `main.ts`
-4. **Retry policy**: 5 tentativas de restart
-
-### Health Check Issues
-
-1. **Railway gerencia o health check**: Não há health check no Dockerfile
-2. **Endpoint configurado**: `/health` retorna `{ status: 'ok' }`
-3. **Timeout configurado**: 600s no `railway.toml`
-4. **Logs de debug**: Script de inicialização com logs detalhados
+1. **Health check desabilitado**: Removido para evitar problemas de inicialização
+2. **Inicialização simplificada**: Comando direto `node dist/main.js`
+3. **Logs detalhados**: Tratamento de erros melhorado no `main.ts`
 
 ### Performance
 
 1. Monitore o uso de memória
-2. Verifique se o health check está passando
+2. Verifique os logs da aplicação
 3. Analise os logs de erro
 
 ## 🔧 Correções Recentes
@@ -176,30 +161,24 @@ docker logs container_id
 - ✅ Prisma client gerado durante o build
 - ✅ Dependências do Prisma incluídas na imagem final
 
-### Health Check
+### Inicialização Simplificada
 
-- ✅ Removido health check do Dockerfile
-- ✅ Railway gerencia health check via `railway.toml`
-- ✅ Endpoint `/health` configurado corretamente
-
-### Inicialização da Aplicação
-
-- ✅ Script de inicialização com logs detalhados
+- ✅ Health check removido do Railway
+- ✅ Comando de inicialização simplificado
 - ✅ Tratamento de erros melhorado no `main.ts`
-- ✅ Timeout aumentado para 600s
-- ✅ Retry policy aumentada para 5 tentativas
+- ✅ Logs detalhados durante o startup
 
 ### Build Process
 
 - ✅ Multi-stage build otimizado
 - ✅ Cache de dependências
-- ✅ Configuração Railway otimizada
+- ✅ Configuração Railway simplificada
 
 ## 📈 Métricas
 
 A aplicação expõe métricas básicas:
 
-- Status: `/health`
+- Status: `/health` (disponível após inicialização)
 - Informações: logs de inicialização detalhados
 
 ## 🔄 CI/CD

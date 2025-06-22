@@ -62,29 +62,5 @@ EXPOSE 3000
 ENV NODE_ENV=production
 ENV PORT=3000
 
-# Script de inicialização com debug
-COPY --chown=nestjs:nodejs <<EOF /app/start.sh
-#!/bin/sh
-echo "🚀 Iniciando aplicação..."
-echo "📊 Variáveis de ambiente:"
-echo "   NODE_ENV: \$NODE_ENV"
-echo "   PORT: \$PORT"
-echo "   DATABASE_URL: \$DATABASE_URL"
-
-# Verificar se o arquivo main.js existe
-if [ ! -f "dist/main.js" ]; then
-    echo "❌ Erro: dist/main.js não encontrado!"
-    exit 1
-fi
-
-echo "✅ Arquivo main.js encontrado"
-echo "🌐 Iniciando servidor na porta \$PORT"
-
-# Executar a aplicação
-exec node dist/main.js
-EOF
-
-RUN chmod +x /app/start.sh
-
 # Comando para executar a aplicação
-CMD ["/app/start.sh"] 
+CMD ["node", "dist/main.js"] 
