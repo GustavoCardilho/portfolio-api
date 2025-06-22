@@ -22,7 +22,7 @@ echo "🚀 Iniciando aplicação..."
 
 # Definir variáveis de ambiente para teste
 export NODE_ENV=production
-export PORT=3000
+export PORT=3001
 
 # Executar a aplicação em background
 node dist/main.js &
@@ -39,7 +39,7 @@ if kill -0 $APP_PID 2>/dev/null; then
     
     # Testar health check
     echo "🏥 Testando health check..."
-    if curl -f http://localhost:3000/health > /dev/null 2>&1; then
+    if curl -f http://localhost:3001/health > /dev/null 2>&1; then
         echo "✅ Health check funcionando"
     else
         echo "❌ Health check falhou"
