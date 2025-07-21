@@ -18,7 +18,7 @@ export class S3Service {
       const data = {
         name: file.originalname,
         url: upload.url,
-        key: upload.name,
+        key: upload.key,
       };
 
       return {
@@ -53,5 +53,9 @@ export class S3Service {
         error: error.message,
       };
     }
+  }
+
+  async getFileUrl(key: string) {
+    return this.s3.getFileUrl(key);
   }
 }

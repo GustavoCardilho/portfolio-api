@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { config } from './lib/config/config';
 import { configurations } from './lib/config/configurations';
 import { PrismaModule } from './lib/database/prisma.module';
 import { CertificatesModule } from './modules/certificate/certificate.module';
@@ -8,10 +9,7 @@ import { HealthController } from './modules/health/health.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configurations],
-    }),
+    config,
     PrismaModule,
     CertificatesModule,
     ContactModule,

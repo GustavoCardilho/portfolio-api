@@ -21,60 +21,32 @@ export class CreateCertificateService {
     try {
       const uploadFile = await this.s3Service.uploadFile(file, 'certificates', file.originalname);
 
-      const categories = await Promise.all(
-        data?.category?.map(async (item) => {
-          const findCategory = await this.prisma.certificateCategory.findFirst({
-            where: {
-              name: item.name.toUpperCase(),
-            },
-          });
-
-          if (findCategory) return undefined;
-
-          return item;
-        }) ?? [],
-      );
-
       const certificate = await this.prisma.$transaction(async (tx) => {
         const upsertBody = {
           title: data?.title || '',
           description: data?.description || '',
-          id,
           startDate: data?.startDate || undefined,
           endDate: data?.endDate || undefined,
           url: data?.link || '',
           CertificateFile: {
             create: {
-              url: uploadFile.data?.url || '',
+              key: uploadFile.data?.key || '',
+            },
+          },
+          route: {
+            create: {
+              path: data?.route || '',
             },
           },
         } as Prisma.CertificateCreateInput;
 
-        const certificate = await tx.certificate.upsert({
+        await tx.certificate.upsert({
           where: {
-            id,
+            id: id || '',
           },
           create: upsertBody,
           update: upsertBody,
         });
-
-        await Promise.all(
-          categories.filter(Boolean).map(async (item) => {
-            if (!item) return undefined;
-
-            return tx.certificateCategory.create({
-              data: {
-                name: item.name.toUpperCase() || '',
-                order: item.order || 0,
-                certificates: {
-                  connect: {
-                    id: certificate.id,
-                  },
-                },
-              },
-            });
-          }) ?? [],
-        );
       });
 
       return {
@@ -84,6 +56,7 @@ export class CreateCertificateService {
         data: certificate,
       };
     } catch (err: unknown) {
+      console.log('err', err);
       return {
         success: false,
         message: 'Falha ao adicionar/atualizar certificado',
